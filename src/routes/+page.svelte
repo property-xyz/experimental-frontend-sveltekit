@@ -83,7 +83,7 @@
 
 <Navbar class="max-w-[1024px] min-w-[345px] mx-auto" let:toggle let:hidden>
 		<NavBrand href="/" class="flex-shrink-0">
-			<img src="/logo-stack.svg" class="h-6" alt="XYZ Logo" />
+			<img src="/logo-stack.svg" class="h-20 w-20" alt="XYZ Logo" />
 		</NavBrand>
 
 		<div class="flex items-center justify-end flex-grow md:order-2 md:hidden lg:block">
