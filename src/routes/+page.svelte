@@ -81,7 +81,7 @@
 </script>
 
 
-<Navbar class="max-w-[1024px] min-w-[345px] mx-auto" let:toggle let:hidden>
+<Navbar class="max-w-[1024px] min-w-[384px] mx-auto" let:toggle let:hidden>
 		<NavBrand href="/" class="flex-shrink-0">
 			<img src="/logo-stack.svg" class="h-20 w-20" alt="XYZ Logo" />
 		</NavBrand>
