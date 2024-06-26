@@ -1,6 +1,6 @@
 <script>
 	import '../app.css';
-	import { Button, Input, MegaMenu, Navbar, NavBrand, NavHamburger, NavLi, NavUl, Search } from 'flowbite-svelte';
+	import { Input, MegaMenu, Navbar, NavBrand, NavHamburger, NavLi, NavUl } from 'flowbite-svelte';
 	import { ChevronDownOutline, SearchOutline } from 'flowbite-svelte-icons';
 	import { getCountries, getSubregions } from '$lib/nav';
 
@@ -81,37 +81,37 @@
 </script>
 
 
+<Navbar class="max-w-[1024px] mx-auto" let:toggle let:hidden>
+		<NavBrand href="/" class="flex-shrink-0">
+			<img src="/logo-stack.svg" class="h-6" alt="XYZ Logo" />
+		</NavBrand>
 
-<Navbar class="max-w-[1024px] mx-auto ">
-	<NavBrand href="/">
-		<img src="/logo-stack.svg" class="me-3 h-6" alt="XYZ Logo" />
-	</NavBrand>
-	<div class="flex md:order-2">
-		<Button color="none" data-collapse-toggle="mobile-menu-3" aria-controls="mobile-menu-3" aria-expanded="false" class="md:hidden text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 me-1">
-			<SearchOutline class="w-5 h-5" />
-		</Button>
-		<div class="hidden relative md:block">
-			<div class="flex absolute inset-y-0 start-0 items-center ps-3 pointer-events-none">
-				<SearchOutline class="w-4 h-4" />
+		<div class="flex items-center justify-end flex-grow md:order-2 md:hidden lg:block">
+			<div class="relative w-full max-w-md mx-4 md:max-w-xs md:mx-0">
+				<div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+					<SearchOutline class="w-4 h-4 text-gray-500" />
+				</div>
+				<Input id="search-navbar" class="w-full pl-10" placeholder="Search..." />
 			</div>
-			<Input id="search-navbar" class="ps-10" placeholder="Search..." />
+			<NavHamburger on:click={toggle}/>
 		</div>
-		<NavHamburger />
-	</div>
-	<NavUl>
-		<NavLi href="/">UK</NavLi>
-		{#each getCountries() as country}
-			<NavLi class="cursor-pointer">
-				{country} <ChevronDownOutline class="w-6 h-6 ms-2 text-primary-800 dark:text-white inline" />
-		</NavLi>
-		<MegaMenu items={getSubregions(country)} let:item>
-			<a href={item.href} class="hover:text-primary-600 dark:hover:text-primary-500">{item.name}</a>
-		</MegaMenu>
-		{/each}
-		<NavLi href="/services">Services</NavLi>
-		<NavLi href="/services">Products</NavLi>
-		<NavLi href="/services">Contact</NavLi>
-	</NavUl>
+		<NavUl {hidden} class="md:flex md:order-1">
+			<NavLi href="/">UK</NavLi>
+			{#each getCountries() as country}
+				<NavLi class="cursor-pointer">
+					<div class="flex items-center whitespace-nowrap">
+						<span>{country}</span>
+						<ChevronDownOutline class="w-4 h-4 ml-1 text-primary-800 dark:text-white flex-shrink-0" />
+					</div>
+				</NavLi>
+				<MegaMenu items={getSubregions(country)} let:item>
+					<a href={item.href} class="hover:text-primary-600 dark:hover:text-primary-500">{item.name}</a>
+				</MegaMenu>
+			{/each}
+			<NavLi href="/services">Services</NavLi>
+			<NavLi href="/products">Products</NavLi>
+			<NavLi href="/contact">Contact</NavLi>
+		</NavUl>
 </Navbar>
 
 <slot />
