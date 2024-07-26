@@ -8,7 +8,6 @@
 	export let data: PageData;
 	$: ({ ukGeo, UkData} = data);
 
-	console.log(UkData);
 	function splitIntoGroups(counties, groupSize = 6) {
 		const groups = [];
 		for (let i = 0; i < counties.length; i += groupSize) {
@@ -18,8 +17,10 @@
 	}
 </script>
 
+
 <div class="col-span-full mx-auto">
-<!--		<Hpi hpi={$Hpi.data} country={country}/>-->
+
+	<Hpi hpi={$UkData.data.uk_data_house_price_index}/>
 </div>
 <!--<Card size="xl" class="col-start-3 col-end-11 shadow-lg">-->
 <!--	<Heading tag="h2" class="mb-4 text-center" customSize="text-3xl font-bold">PROPERTY MARKET DATA ON EVERY AREA OF THE-->

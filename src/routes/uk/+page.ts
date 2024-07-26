@@ -9,7 +9,8 @@ export function _houdini_onError() {
  console.log(`!!!!!GQL error!!!!!`);
 }
 
-export const _UKDataVariables: UkDataVariables = () => {
-  console.log(`!!!!!GQL query!!!!!`);
-	return getCountries();
+export const _UkDataVariables: UkDataVariables = () => {
+	return {
+		countries: getCountries()
+	}
 }

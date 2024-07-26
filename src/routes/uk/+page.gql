@@ -1,4 +1,4 @@
-query UkData($countries: [String!]!) {
-       ...CountryPopulationProjection
-       ...Hpi @with(countries: $countries)
+query UkData($countries: [String!]!){
+    ...CountryPopulationProjection   @loading
+    ...Hpi @with(countries: $countries)  @loading
 }

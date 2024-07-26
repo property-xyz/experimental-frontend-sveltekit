@@ -1,73 +1,35 @@
 <script lang="ts">
 	import { Chart, Card, Button, Dropdown, DropdownItem } from 'flowbite-svelte';
 	import { ChevronRightOutline, ChevronDownOutline } from 'flowbite-svelte-icons';
-	import { fragment, graphql } from '$houdini';
-	import { type Hpi } from '$houdini';
+	import { fragment, graphql, type Hpi } from '$houdini';
 
 	export let hpi: Hpi;
-	export let country: string
 
-	$: hpiData = fragment(hpi, graphql(`
-				fragment Hpi on query_root @arguments(countries: {type: "[String!]!"}) {
-						uk_data_house_price_index (
-								where: {regionname: {_in: $countries}},
-								order_by: {date: desc}
-						) {
-                    averageprice
-                    averagepricesa
-                    cashindex
-                    cashonemonthpercentchange
-                    cashprice
-                    cashsalesvolume
-                    cashtwelvemonthpercentchange
-                    detachedindex
-                    detachedonemonthpercentchange
-                    detachedprice
-                    detachedtwelvemonthpercentchange
-                    flatindex
-                    flatonemonthpercentchange
-                    flatprice
-                    flattwelvemonthpercentchange
-                    fooindex
-                    fooonemonthpercentchange
-                    fooprice
-                    footwelvemonthpercentchange
-                    ftbindex
-                    ftbonemonthpercentchange
-                    ftbprice
-                    ftbtwelvemonthpercentchange
-                    index
-                    indexsa
-                    last_update
-                    mortgageindex
-                    mortgageonemonthpercentchange
-                    mortgageprice
-                    mortgagesalesvolume
-                    mortgagetwelvemonthpercentchange
-                    newindex
-                    newonemonthpercentchange
-                    newprice
-                    newsalesvolume
-                    newtwelvemonthpercentchange
-                    oldindex
-                    oldonemonthpercentchange
-                    oldprice
-                    oldsalesvolume
-                    oldtwelvemonthpercentchange
-                    onemonthpercentchange
-                    salesvolume
-                    semidetachedindex
-                    semidetachedonemonthpercentchange
-                    semidetachedprice
-                    semidetachedtwelvemonthpercentchange
-                    terracedindex
-                    terracedonemonthpercentchange
-                    terracedprice
-                    terracedtwelvemonthpercentchange
-                    twelvemonthpercentchange
-                    date
-                    regionname
-		}}`));
+	$: data = fragment(hpi, graphql(`
+		fragment Hpi on query_root @arguments(countries: {type: "[String!]!"}) {
+			uk_data_house_price_index (
+				where: {regionname: {_in: $countries}},
+				order_by: {date: desc}
+			) {
+				averageprice
+				detachedprice
+				semidetachedprice
+				terracedprice
+				flatprice
+				ftbprice
+				fooprice
+				cashprice
+				mortgageprice
+				salesvolume
+				cashsalesvolume
+				mortgagesalesvolume
+				newprice
+				oldprice
+				date
+				regionname
+			}
+		}
+	`));
 
 	const categories = [
 		{
@@ -88,7 +50,7 @@
 		const colors = ['#1A56DB', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#6366F1'];
 		const series = metrics.map((metric, index) => ({
 			name: getMetricDisplayName(metric),
-			data: data.map(d => d[metric]).reverse(),
+			data: $data.map(d => d[metric]).reverse(),
 			color: colors[index % colors.length]
 		}));
 
@@ -96,7 +58,7 @@
 		if (series.length === 1) {
 			series.push({
 				name: 'Hidden',
-				data: Array(data.length).fill(null),
+				data: Array($data.length).fill(null),
 				color: 'transparent'
 			});
 		}
@@ -142,7 +104,7 @@
 			}
 		},
 		xaxis: {
-			categories: data.map(d => d.date).reverse(),
+			categories: $data.map(d => d.date).reverse(),
 			labels: { show: true },
 			axisBorder: { show: true },
 			axisTicks: { show: true }
@@ -152,7 +114,7 @@
 				title: { text: 'Price (£)' },
 				labels: {
 					formatter: (value) => '£' + (value / 1000).toFixed(0) + 'k'
-				}
+				},
 			},
 			{
 				title: { text: 'Volume' },
@@ -160,7 +122,7 @@
 				show: selectedMetrics.some(m => m.includes('volume')),
 				labels: {
 					formatter: (value) => value.toLocaleString()
-				}
+				},
 			}
 		],
 		tooltip: {
@@ -222,7 +184,7 @@
 
 	$: averagePriceChange = ((latestData.averageprice - data[1].averageprice) / data[1].averageprice * 100).toFixed(1);
 
-	$: options = { ...options, series: getChartSeries(selectedMetrics) };
+	$: options = {...options, series: getChartSeries(selectedMetrics)};
 </script>
 
 <Card class="w-full max-w-4xl mx-auto">
